@@ -2,16 +2,19 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuex from 'vuex'
+import AtComponents from 'at-ui'
+import 'at-ui-style'
 import App from './App'
 
 Vue.use(Vuex)
+Vue.use(AtComponents)
 Vue.config.productionTip = false
 
-const store = new Vuex.Store({
+const todoModule = {
     state: {
         todos: [
-            { id: 1, text: 'Number 1', done: true },
-            { id: 2, text: 'Number 2', done: false }
+            // { id: 1, text: 'Number 1', done: true },
+            // { id: 2, text: 'Number 2', done: false }
         ]
     },
     getters: {
@@ -21,8 +24,22 @@ const store = new Vuex.Store({
         doneTodosCount: (state, getters) => {
             return getters.doneTodos.length
         }
+    },
+    actions: {
+        addTodo ({ commit }, todo) {
+            // setTimeout(() => {
+            commit('addTodo', todo)
+            // }, 1000)
+        }
+    },
+    mutations: {
+        addTodo (state, todo) {
+            state.todos.push(todo)
+        }
     }
-})
+}
+
+const store = new Vuex.Store(todoModule)
 
 /* eslint-disable no-new */
 new Vue({

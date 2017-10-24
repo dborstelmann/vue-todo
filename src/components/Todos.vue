@@ -1,15 +1,30 @@
 <template>
     <div class="todos">
-        <h1>{{ msg }}</h1>
+        <ul v-for="todo in todos">
+            <li>{{todo.text}}</li>
+        </ul>
+        <at-input @keyup.enter.native="addTodo" placeholder="New todo..."></at-input>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
     name: 'Todos',
-    data () {
-        return {
-            msg: 'Todo with Vue!'
+    computed: mapState([
+        'todos'
+    ]),
+    methods: {
+        addTodo (e) {
+            var text = e.target.value
+            if (text.trim()) {
+                this.$store.dispatch('addTodo', {
+                    text: e.target.value,
+                    done: false
+                })
+            }
+            e.target.value = ''
         }
     }
 }
