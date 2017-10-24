@@ -13,10 +13,7 @@ Vue.config.productionTip = false
 
 const todoModule = {
     state: {
-        todos: [
-            // { id: 1, text: 'Number 1', done: true },
-            // { id: 2, text: 'Number 2', done: false }
-        ],
+        todos: [],
         nextTodoId: 1
     },
     getters: {
@@ -41,7 +38,6 @@ const todoModule = {
             commit('removeTodo', todo)
         },
         toggleDone ({ commit }, todo) {
-            console.log('hi')
             commit('toggleDone', todo)
         }
     },
@@ -56,7 +52,6 @@ const todoModule = {
             state.todos = _.reject(state.todos, (t) => t.id === todo.id)
         },
         toggleDone (state, todo) {
-            console.log('hello')
             todo.done = !todo.done
         },
         incrementId (state) {
