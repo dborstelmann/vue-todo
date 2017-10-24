@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import AtComponents from 'at-ui'
 import 'at-ui-style'
+import _ from 'underscore'
 import App from './App'
 
 Vue.use(Vuex)
@@ -15,7 +16,8 @@ const todoModule = {
         todos: [
             // { id: 1, text: 'Number 1', done: true },
             // { id: 2, text: 'Number 2', done: false }
-        ]
+        ],
+        nextTodoId: 1
     },
     getters: {
         doneTodos: state => {
@@ -29,12 +31,36 @@ const todoModule = {
         addTodo ({ commit }, todo) {
             // setTimeout(() => {
             commit('addTodo', todo)
+            commit('incrementId')
             // }, 1000)
+        },
+        editTodo ({ commit }, { todo, newText }) {
+            commit('editTodo', { todo, newText })
+        },
+        removeTodo ({ commit }, todo) {
+            commit('removeTodo', todo)
+        },
+        toggleDone ({ commit }, todo) {
+            console.log('hi')
+            commit('toggleDone', todo)
         }
     },
     mutations: {
         addTodo (state, todo) {
-            state.todos.push(todo)
+            state.todos.push({...todo, id: state.nextTodoId})
+        },
+        editTodo (state, { todo, newText }) {
+            todo.text = newText
+        },
+        removeTodo (state, todo) {
+            state.todos = _.reject(state.todos, (t) => t.id === todo.id)
+        },
+        toggleDone (state, todo) {
+            console.log('hello')
+            todo.done = !todo.done
+        },
+        incrementId (state) {
+            state.nextTodoId++
         }
     }
 }
