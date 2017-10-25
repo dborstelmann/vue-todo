@@ -3,7 +3,7 @@
         <div class="todos">
             <div v-for="todo in todos" class="todo row at-row" :key="todo.id">
                 <!-- <span class="todo-text">{{todo.text}}</span> -->
-                <at-input @keyup.enter.native="editTodo(todo, $event)" size="large" :value="todo.text" class="edit-todo todo-input" :disabled="todo.done ? 'disabled': null" placeholder="...press enter to remove"></at-input>
+                <at-input @keyup.enter.native="editTodo(todo, $event)" @blur="editTodo(todo, $event)" size="large" :value="todo.text" class="edit-todo todo-input" :disabled="todo.done ? 'disabled': null" placeholder="...press enter to remove"></at-input>
                 <at-button @click="toggleDone(todo)" class="medium-large" type="primary" icon="icon-check" circle size="large" :hollow="!todo.done ? 'hollow': null"></at-button>
                 <at-button @click="removeTodo(todo)" class="medium-large" type="error" icon="icon-x" circle size="large" hollow></at-button>
             </div>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
     name: 'Todos',
@@ -29,6 +29,8 @@ export default {
                 this.$store.dispatch('addTodo', {
                     text: e.target.value,
                     done: false
+                }).then(() => {
+                    this.$Message.info('Task added')
                 })
             }
             e.target.value = ''
@@ -39,17 +41,23 @@ export default {
                 this.$store.dispatch('editTodo', {
                     todo,
                     newText: text
+                }).then(() => {
+                    this.$Message.info('Task edited')
                 })
             } else {
                 this.removeTodo(todo)
             }
         },
         removeTodo (todo) {
-            this.$store.dispatch('removeTodo', todo)
+            this.$store.dispatch('removeTodo', todo).then(() => {
+                this.$Message.warning('Task removed')
+            })
         },
-        ...mapActions([
-            'toggleDone'
-        ])
+        toggleDone (todo) {
+            this.$store.dispatch('toggleDone', todo).then((newTodo) => {
+                newTodo.done ? this.$Message.success('Task completed :)') : this.$Message.error('Task undone :(')
+            })
+        }
     }
 }
 </script>

@@ -26,19 +26,32 @@ const todoModule = {
     },
     actions: {
         addTodo ({ commit }, todo) {
-            // setTimeout(() => {
-            commit('addTodo', todo)
-            commit('incrementId')
-            // }, 1000)
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    commit('addTodo', todo)
+                    commit('incrementId')
+                    resolve()
+                }, 1)
+            })
         },
         editTodo ({ commit }, { todo, newText }) {
-            commit('editTodo', { todo, newText })
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    commit('editTodo', { todo, newText })
+                    resolve()
+                }, 1)
+            })
         },
         removeTodo ({ commit }, todo) {
             commit('removeTodo', todo)
         },
         toggleDone ({ commit }, todo) {
-            commit('toggleDone', todo)
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    commit('toggleDone', todo)
+                    resolve(todo)
+                }, 1)
+            })
         }
     },
     mutations: {
