@@ -1,14 +1,46 @@
 <template>
     <div class="todo-wrapper">
         <div class="todos">
-            <div v-for="todo in todos" class="todo row at-row" :key="todo.id">
-                <!-- <span class="todo-text">{{todo.text}}</span> -->
-                <at-input @keyup.enter.native="editTodo(todo, $event)" @blur="editTodo(todo, $event)" size="large" :value="todo.text" class="edit-todo todo-input" :disabled="todo.done ? 'disabled': null" placeholder="...press enter to remove"></at-input>
-                <at-button @click="toggleDone(todo)" class="medium-large" type="primary" icon="icon-check" circle size="large" :hollow="!todo.done ? 'hollow': null"></at-button>
-                <at-button @click="removeTodo(todo)" class="medium-large" type="error" icon="icon-x" circle size="large" hollow></at-button>
+            <div
+                v-for="todo in todos"
+                class="todo row at-row"
+                :key="todo.id"
+            >
+                <at-input
+                    class="edit-todo todo-input"
+                    placeholder="...press enter to remove"
+                    size="large"
+                    :value="todo.text"
+                    :disabled="todo.done ? 'disabled': null"
+                    @keyup.enter.native="editTodo(todo, $event)"
+                    @blur="editTodo(todo, $event)"
+                />
+                <at-button
+                    class="action-button"
+                    type="primary"
+                    icon="icon-check"
+                    size="large"
+                    circle
+                    :hollow="!todo.done ? 'hollow': null"
+                    @click="toggleDone(todo)"
+                />
+                <at-button
+                    class="action-button"
+                    type="error"
+                    icon="icon-x"
+                    size="large"
+                    circle
+                    hollow
+                    @click="removeTodo(todo)"
+                />
             </div>
             <div class="todo row at-row">
-                <at-input size="large" class="new-todo todo-input" @keyup.enter.native="addTodo" placeholder="New todo..."></at-input>
+                <at-input
+                    class="new-todo todo-input"
+                    placeholder="New todo..."
+                    size="large"
+                    @keyup.enter.native="addTodo"
+                />
             </div>
         </div>
     </div>
@@ -74,7 +106,7 @@ export default {
             justify-content: space-between;
             margin-bottom: 10px;
 
-            .medium-large {
+            .action-button {
                 width: 36px;
                 height: 36px;
                 margin-left: 10px;
