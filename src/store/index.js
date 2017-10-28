@@ -3,8 +3,7 @@ import mutations from './mutations'
 
 export default {
     state: {
-        todos: [],
-        nextTodoId: 1
+        todos: []
     },
     actions: actions,
     mutations: mutations

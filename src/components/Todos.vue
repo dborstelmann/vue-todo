@@ -13,8 +13,8 @@
                     :value="todo.text"
                     :disabled="todo.done ? 'disabled': null"
                     @keyup.enter.native="editTodo(todo, $event)"
-                    @blur="editTodo(todo, $event)"
                 />
+                <!-- @blur="editTodo(todo, $event)" -->
                 <at-button
                     class="action-button"
                     type="primary"
@@ -51,6 +51,9 @@ import { mapState } from 'vuex'
 
 export default {
     name: 'Todos',
+    created () {
+        this.$store.dispatch('fetchTodos')
+    },
     computed: mapState([
         'todos'
     ]),
@@ -63,6 +66,8 @@ export default {
                     done: false
                 }).then(() => {
                     this.$Message.info('Task added')
+                }, () => {
+                    this.$Message.error('Server error')
                 })
             }
             e.target.value = ''
