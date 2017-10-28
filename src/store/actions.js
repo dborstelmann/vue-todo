@@ -1,5 +1,5 @@
 import Vue from 'vue'
-const graphURL = 'http://localhost:8080/graphql'
+const graphURL = 'https://graphql-todo.herokuapp.com/'
 
 export default {
     fetchTodos ({ commit }) {
