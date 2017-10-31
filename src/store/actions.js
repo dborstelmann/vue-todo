@@ -2,9 +2,9 @@ import Vue from 'vue'
 const graphURL = 'https://graphql-todo.herokuapp.com/graphql'
 
 export default {
-    fetchTodos ({ commit }) {
-        return new Promise((resolve, reject) => {
-            Vue.http.post(
+    async fetchTodos ({ commit }) {
+        try {
+            const response = await Vue.http.post(
                 graphURL,
                 {
                     query: `
@@ -17,17 +17,15 @@ export default {
                         }
                     `
                 }
-            ).then(response => {
-                commit('fetchTodos', response.body.data.todos)
-                resolve()
-            }, response => {
-                reject(response)
-            })
-        })
+            )
+            commit('fetchTodos', response.body.data.todos)
+        } catch (e) {
+            throw e
+        }
     },
-    addTodo ({ commit }, todo) {
-        return new Promise((resolve, reject) => {
-            Vue.http.post(
+    async addTodo ({ commit }, todo) {
+        try {
+            const response = await Vue.http.post(
                 graphURL,
                 {
                     query: `
@@ -40,22 +38,20 @@ export default {
                         }
                     `
                 }
-            ).then(response => {
-                commit('addTodo', response.body.data.add)
-                resolve()
-            }, response => {
-                reject(response)
-            })
-        })
+            )
+            commit('addTodo', response.body.data.add)
+        } catch (e) {
+            throw e
+        }
     },
-    editTodo ({ commit }, { todo, newText }) {
-        return new Promise((resolve, reject) => {
-            Vue.http.post(
+    async editTodo ({ commit }, { todo, updatedText }) {
+        try {
+            const response = await Vue.http.post(
                 graphURL,
                 {
                     query: `
                         mutation {
-                            edit (id: "${todo.id}", text: "${newText}") {
+                            edit (id: "${todo.id}", text: "${updatedText}") {
                                 id
                                 text
                                 done
@@ -63,17 +59,15 @@ export default {
                         }
                     `
                 }
-            ).then(response => {
-                commit('editTodo', { todo, updatedTodo: response.body.data.edit })
-                resolve()
-            }, response => {
-                reject(response)
-            })
-        })
+            )
+            commit('editTodo', { todo, updatedTodo: response.body.data.edit })
+        } catch (e) {
+            throw e
+        }
     },
-    removeTodo ({ commit }, todo) {
-        return new Promise((resolve, reject) => {
-            Vue.http.post(
+    async removeTodo ({ commit }, todo) {
+        try {
+            await Vue.http.post(
                 graphURL,
                 {
                     query: `
@@ -86,17 +80,15 @@ export default {
                         }
                     `
                 }
-            ).then(response => {
-                commit('removeTodo', todo)
-                resolve()
-            }, response => {
-                reject(response)
-            })
-        })
+            )
+            commit('removeTodo', todo)
+        } catch (e) {
+            throw e
+        }
     },
-    toggleDone ({ commit }, todo) {
-        return new Promise((resolve, reject) => {
-            Vue.http.post(
+    async toggleDone ({ commit }, todo) {
+        try {
+            await Vue.http.post(
                 graphURL,
                 {
                     query: `
@@ -109,12 +101,11 @@ export default {
                         }
                     `
                 }
-            ).then(response => {
-                commit('toggleDone', todo)
-                resolve(todo)
-            }, response => {
-                reject(response)
-            })
-        })
+            )
+            commit('toggleDone', todo)
+            return todo
+        } catch (e) {
+            throw e
+        }
     }
 }
