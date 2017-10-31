@@ -66,9 +66,7 @@ export default {
                     done: false
                 }).then(() => {
                     this.$Message.info('Task added')
-                }, () => {
-                    this.$Message.error('Server error')
-                })
+                }, this.errorMessage)
             }
             e.target.value = ''
         },
@@ -77,10 +75,10 @@ export default {
             if (text.trim()) {
                 this.$store.dispatch('editTodo', {
                     todo,
-                    newText: text
+                    updatedText: text
                 }).then(() => {
                     this.$Message.info('Task edited')
-                })
+                }, this.errorMessage)
             } else {
                 this.removeTodo(todo)
             }
@@ -88,12 +86,15 @@ export default {
         removeTodo (todo) {
             this.$store.dispatch('removeTodo', todo).then(() => {
                 this.$Message.warning('Task removed')
-            })
+            }, this.errorMessage)
         },
         toggleDone (todo) {
-            this.$store.dispatch('toggleDone', todo).then((newTodo) => {
-                newTodo.done ? this.$Message.success('Task completed :)') : this.$Message.error('Task undone :(')
-            })
+            this.$store.dispatch('toggleDone', todo).then((updatedTodo) => {
+                updatedTodo.done ? this.$Message.success('Task completed :)') : this.$Message.error('Task undone :(')
+            }, this.errorMessage)
+        },
+        errorMessage () {
+            this.$Message.error('Server error')
         }
     }
 }
